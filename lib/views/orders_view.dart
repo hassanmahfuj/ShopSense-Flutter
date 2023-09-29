@@ -39,7 +39,7 @@ class _OrdersViewState extends State<OrdersView> {
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(snapshot.data![index].orderDate),
+                  subtitle: Text(snapshot.data![index].orderDate.toIso8601String()),
                   trailing: Text(
                     "৳${snapshot.data![index].orderTotal.toString()}",
                     style: const TextStyle(fontSize: 16),

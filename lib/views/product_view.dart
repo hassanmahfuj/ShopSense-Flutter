@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopsense/models/cart_item.dart';
 import 'package:shopsense/models/product.dart';
+import 'package:shopsense/repository/customer_repo.dart';
 import 'package:shopsense/repository/product_repo.dart';
 import 'package:shopsense/util/constants.dart';
 
@@ -44,6 +46,31 @@ class _ProductViewState extends State<ProductView> {
     }
   }
 
+  void addToCart() async {
+    CartItem c = CartItem(
+        id: 0,
+        customerId: 0,
+        productId: product!.id,
+        sellerId: product!.sellerId,
+        storeName: product!.storeName,
+        productName: product!.title,
+        productThumbnailUrl: product!.thumbnailUrl,
+        productUnitPrice: double.parse(product!.salePrice),
+        productQuantity: quantity,
+        subTotal: subTotal);
+    await customerAddToCart(c)
+        ? showMessage("Added to cart")
+        : showMessage("Something went wrong");
+  }
+
+  showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +96,6 @@ class _ProductViewState extends State<ProductView> {
                       width: double.infinity,
                     ),
                     Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: Padding(
@@ -258,7 +284,9 @@ class _ProductViewState extends State<ProductView> {
                               style: OutlinedButton.styleFrom(
                                 side: const BorderSide(color: Colors.white),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                addToCart();
+                              },
                               child: const Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -268,7 +296,9 @@ class _ProductViewState extends State<ProductView> {
                                   Text(
                                     'Add to Cart',
                                     style: TextStyle(
-                                        fontSize: 15, color: Colors.white,),
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ],
                               ),

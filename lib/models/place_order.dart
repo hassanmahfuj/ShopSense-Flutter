@@ -1,13 +1,16 @@
 import 'dart:convert';
 
-Order orderFromJson(String str) => Order.fromJson(json.decode(str));
+import 'package:shopsense/models/order_details.dart';
 
-String orderToJson(Order data) => json.encode(data.toJson());
+PlaceOrder placeOrderFromJson(String str) =>
+    PlaceOrder.fromJson(json.decode(str));
 
-List<Order> orderListFromJson(String str) =>
-    List<Order>.from(json.decode(str).map((x) => Order.fromJson(x)));
+String placeOrderToJson(PlaceOrder data) => json.encode(data.toJson());
 
-class Order {
+List<PlaceOrder> placeOrderListFromJson(String str) =>
+    List<PlaceOrder>.from(json.decode(str).map((x) => PlaceOrder.fromJson(x)));
+
+class PlaceOrder {
   int id;
   DateTime orderDate;
   double orderTotal;
@@ -29,8 +32,9 @@ class Order {
   String cardHolderName;
   String cardExpiryDate;
   double gatewayFee;
+  List<OrderDetail> orderDetails;
 
-  Order({
+  PlaceOrder({
     required this.id,
     required this.orderDate,
     required this.orderTotal,
@@ -52,9 +56,10 @@ class Order {
     required this.cardHolderName,
     required this.cardExpiryDate,
     required this.gatewayFee,
+    required this.orderDetails,
   });
 
-  factory Order.fromJson(Map<String, dynamic> json) => Order(
+  factory PlaceOrder.fromJson(Map<String, dynamic> json) => PlaceOrder(
         id: json["id"],
         orderDate: DateTime.parse(json["orderDate"]),
         orderTotal: json["orderTotal"]?.toDouble(),
@@ -76,6 +81,8 @@ class Order {
         cardHolderName: json["cardHolderName"],
         cardExpiryDate: json["cardExpiryDate"],
         gatewayFee: json["gatewayFee"],
+        orderDetails: List<OrderDetail>.from(
+            json["orderDetails"].map((x) => OrderDetail.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -101,5 +108,6 @@ class Order {
         "cardHolderName": cardHolderName,
         "cardExpiryDate": cardExpiryDate,
         "gatewayFee": gatewayFee,
+        "orderDetails": List<dynamic>.from(orderDetails.map((x) => x.toJson())),
       };
 }

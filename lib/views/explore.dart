@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopsense/models/product.dart';
 import 'package:shopsense/repository/product_repo.dart';
 import 'package:shopsense/util/constants.dart';
+import 'package:shopsense/views/cart_view.dart';
 import 'package:shopsense/views/product_view.dart';
 import 'package:shopsense/widgets/product_card.dart';
 
@@ -23,7 +24,14 @@ class _ExploreState extends State<Explore> {
           title: const Text("ShopSense"),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartView(),
+                  ),
+                );
+              },
               icon: const Icon(Icons.shopping_cart),
             ),
           ],
@@ -32,7 +40,8 @@ class _ExploreState extends State<Explore> {
           child: SingleChildScrollView(
             child: FutureBuilder<List<Product>>(
               future: fetchProducts(),
-              builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Product>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
@@ -43,7 +52,8 @@ class _ExploreState extends State<Explore> {
                     padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5,
@@ -52,22 +62,22 @@ class _ExploreState extends State<Explore> {
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductView(productId: items[index].id.toString()),
-                            ),
-                          );
-                        },
-                        child: ProductCard(
-                          title: items[index].title,
-                          price: double.parse(items[index].regularPrice),
-                          salePrice: double.parse(items[index].salePrice),
-                          thumbnailUrl: "$baseUrl/${items[index].thumbnailUrl}",
-                        )
-                      );
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductView(
+                                    productId: items[index].id.toString()),
+                              ),
+                            );
+                          },
+                          child: ProductCard(
+                            title: items[index].title,
+                            price: double.parse(items[index].regularPrice),
+                            salePrice: double.parse(items[index].salePrice),
+                            thumbnailUrl:
+                                "$baseUrl/${items[index].thumbnailUrl}",
+                          ));
                     },
                   );
                 }
