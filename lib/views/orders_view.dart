@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopsense/models/order.dart';
 import 'package:shopsense/repository/customer_repo.dart';
+import 'package:shopsense/views/order_view.dart';
 
 class OrdersView extends StatefulWidget {
   const OrdersView({super.key});
@@ -30,6 +31,15 @@ class _OrdersViewState extends State<OrdersView> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderView(
+                            orderId: snapshot.data![index].id.toString()),
+                      ),
+                    );
+                  },
                   leading: Text(
                     snapshot.data![index].id.toString(),
                     style: const TextStyle(fontSize: 14),
@@ -39,7 +49,8 @@ class _OrdersViewState extends State<OrdersView> {
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(snapshot.data![index].orderDate.toIso8601String()),
+                  subtitle:
+                      Text(snapshot.data![index].orderDate.toIso8601String()),
                   trailing: Text(
                     "৳${snapshot.data![index].orderTotal.toString()}",
                     style: const TextStyle(fontSize: 16),

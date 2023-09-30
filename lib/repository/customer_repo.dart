@@ -87,7 +87,7 @@ Future<bool> customerAddToCart(CartItem c) async {
   }
 }
 
-Future<bool> customerPlaceOrder(PlaceOrder c) async {
+Future<String> customerPlaceOrder(PlaceOrder c) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   String userId = prefs.getString('userId') ?? "";
   String token = prefs.getString('token') ?? "";
@@ -95,9 +95,23 @@ Future<bool> customerPlaceOrder(PlaceOrder c) async {
   final response = await http.post(Uri.parse('$baseUrl/customer/order'),
       headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
   body: jsonEncode(c.toJson()));
-  if (response.statusCode == 200) {
-    return response.body != "";
+  if (response.statusCode == 200 && response.body != "") {
+    Order o = orderFromJson(response.body);
+    return o.id.toString();
   } else {
-    throw Exception("Failed to get customer cart items");
+    return "";
+  }
+}
+
+Future<PlaceOrder> customerGetOrder(String orderId) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  String userId = prefs.getString('userId') ?? "";
+  String token = prefs.getString('token') ?? "";
+  final response = await http.get(Uri.parse('$baseUrl/customer/order?id=$orderId'),
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
+  if (response.statusCode == 200 && response.body != "") {
+    return placeOrderFromJson(response.body);
+  } else {
+    throw Exception("Failed to get customer profile");
   }
 }

@@ -3,6 +3,7 @@ import 'package:shopsense/models/cart_item.dart';
 import 'package:shopsense/models/order_details.dart';
 import 'package:shopsense/models/place_order.dart';
 import 'package:shopsense/repository/customer_repo.dart';
+import 'package:shopsense/views/order_placed_view.dart';
 
 class CheckoutView extends StatefulWidget {
   const CheckoutView({super.key});
@@ -86,9 +87,19 @@ class _CheckoutViewState extends State<CheckoutView> {
       orderDetails: orderDetails,
     );
 
-    await customerPlaceOrder(order)
-        ? showMessage("Order PLaced")
-        : showMessage("Something went wrong");
+    String orderId = await customerPlaceOrder(order);
+    if (orderId != "") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => OrderPlacedView(
+            orderId: orderId,
+          ),
+        ),
+      );
+    } else {
+      showMessage("Something went wrong");
+    }
   }
 
   showMessage(String message) {

@@ -70,7 +70,7 @@ class _CartViewState extends State<CartView> {
                       side: const BorderSide(color: Colors.white),
                     ),
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const CheckoutView(),

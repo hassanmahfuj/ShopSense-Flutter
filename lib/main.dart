@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopsense/home.dart';
 import 'package:shopsense/providers/auth_provider.dart';
-import 'package:shopsense/views/auth_view.dart';
+import 'package:shopsense/views/order_view.dart';
 
 void main() {
   runApp(const MyApp());
